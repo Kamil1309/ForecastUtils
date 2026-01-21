@@ -57,7 +57,7 @@ def CalculateErrors(realTimeSeries, predictedTimeSeries, printData=False, decima
          suffix = "%" if k in ["MPE", "MAPE", "rRMSE", "rMBE"] else ""
          print(f"{k}: {v}{suffix}")
 
-   return tuple(results.values())
+   return results
 
 def CalculateMAPE(realTimeSeries, predictedTimeSeries, printData=False, decimalPlaces=2):
    """
