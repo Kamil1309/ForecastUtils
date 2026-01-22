@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 def LoadCSVSeries(filePath, columnNames, delimiter=';'):
    """
@@ -23,6 +24,24 @@ def LoadCSVSeries(filePath, columnNames, delimiter=';'):
    else:
       return selected.values
 
+def SaveCSVResults(results: pd.DataFrame, output_path: str, decimal_places: int = 3):
+    """
+    Zapisuje wyniki (DataFrame) do pliku CSV.
+    Kolumny zaczynające się od 'Actual_' i 'Predicted_' są zaokrąglane.
+    """
+    if not isinstance(results, pd.DataFrame):
+        raise TypeError("results musi być obiektem pandas.DataFrame")
+
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    results_rounded = results.copy()
+
+    for col in results_rounded.columns:
+        if col.startswith(("Actual_", "Predicted_")):
+            results_rounded[col] = results_rounded[col].round(decimal_places)
+
+    results_rounded.to_csv(output_path, index=False)
+    print(f"✅ Wyniki zapisano do: {output_path}")
 
 
 # ======= PRZYKŁAD UŻYCIA =======
