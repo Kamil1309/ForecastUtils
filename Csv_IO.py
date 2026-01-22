@@ -47,14 +47,37 @@ def SaveCSVResults(results: pd.DataFrame, output_path: str, decimal_places: int 
 # ======= PRZYKŁAD UŻYCIA =======
 
 if __name__ == "__main__":
-   data_array = LoadCSVSeries('Data/Bukowsko_total_sum.csv', 'Energy (kWh)') # jedna kolumna
 
-   print(data_array.shape)
-   print(data_array[:5], '\n')
+   # --- Wczytanie jednej kolumny ---
+   energy = LoadCSVSeries(
+      "Data/Bukowsko_total_sum.csv",
+      "Energy (kWh)"
+   )
 
-   # wiele kolumn
-   columns = ['Average power (kW)','Energy (kWh)']
-   data_array = LoadCSVSeries('Data/Bukowsko_total_sum.csv', columns)
+   print("Jedna kolumna:")
+   print(energy.shape)
+   print(energy[:5], "\n")
 
-   print(data_array.shape)
-   print(data_array[:5])
+   # --- Wczytanie wielu kolumn ---
+   columns = ["Average power (kW)", "Energy (kWh)"]
+   data = LoadCSVSeries(
+      "Data/Bukowsko_total_sum.csv",
+      columns
+   )
+
+   print("Wiele kolumn:")
+   print(data.shape)
+   print(data[:5], "\n")
+
+   # --- Utworzenie prostego DataFrame do zapisu ---
+   results = pd.DataFrame({
+      "Actual_Energy": data[:, 1],
+      "Predicted_Energy": data[:, 1] * 0.95  # przykładowa "predykcja"
+   })
+
+   # --- Zapis do pliku CSV ---
+   SaveCSVResults(
+      results,
+      output_path="Results/example_predictions.csv",
+      decimal_places=3
+   )
