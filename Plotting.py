@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 def create_series_plot(
    series_list: list[dict],
@@ -47,9 +48,16 @@ def create_series_plot(
    fig.tight_layout()
    return fig
 
-import os
-
 def save_plot(fig, path):
-   """Zapisuje przekazany wykres."""
-   fig.savefig(path, dpi=300, bbox_inches="tight")
-   plt.close(fig)
+   """Tylko zapisuje przekazany wykres i tworzy foldery, jeśli ich nie ma."""
+   if path:
+      # Wyciągnięcie ścieżki do folderu z pełnej ścieżki pliku
+      directory = os.path.dirname(path)
+      
+      # Tworzenie folderu, jeśli nie istnieje
+      if directory and not os.path.exists(directory):
+         os.makedirs(directory, exist_ok=True)
+         print(f"📁 Utworzono brakujący folder: {directory}")
+         
+      fig.savefig(path, dpi=300, bbox_inches="tight")
+      print(f"✅ Wykres zapisano do pliku: {path}")
